@@ -27,8 +27,8 @@ Now we imagine that x[n] is a realtime signal (audio perhaps) that we process in
 [**fdl- Frequency Domain Delay Line**](https://github.com/vtolani95/convolution_algorithms/blob/master/reverb.py#L78)
 Again we have x[n] being a realtime signal that we process in chunks. We still aim to read in input buffer, process, and output a buffer in near realtime. Now however we aim to perform fewer fft operations. Following the method described in [section 2.1](http://ericbattenberg.com/school/partconvDAFx2011.pdf) if we choose the block size, k, for the impulse response to be k=L (L is the input buffer size) we can actually perform overlap add in the frequency domain and only use one output fft per input cycle. This can lead to substantial speed ups in realtime audio processing. Initial tests in python show substantial speed ups when compared to uniform partitioned convolution.
 
-**Future Work**
-1. Optimize fft size (fft works best when the input sequence size is a power of 2)
-2. Add non uniform paritions to impulse response as described in [section 2.2](http://ericbattenberg.com/school/partconvDAFx2011.pdf). The earlier impulse responses will be short for low latency while the later ones will be long for computational efficiency.
-3. Use Decimation in Frequency to construct a time distributed approach for scheduling necessary FFT computations as described in [section 4](http://ericbattenberg.com/school/partconvDAFx2011.pdf)
+**Future Work**  
+1. Optimize fft size (fft works best when the input sequence size is a power of 2)  
+2. Add non uniform paritions to impulse response as described in [section 2.2](http://ericbattenberg.com/school/partconvDAFx2011.pdf). The earlier impulse responses will be short for low latency while the later ones will be long for computational efficiency.  
+3. Use Decimation in Frequency to construct a time distributed approach for scheduling necessary FFT computations as described in [section 4](http://ericbattenberg.com/school/partconvDAFx2011.pdf)  
 4. Port code to C for near real time processing
