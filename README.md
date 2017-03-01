@@ -4,7 +4,7 @@ This code base deals with several algorithms for rapid convolution of two sequen
 **All algorithmns input x and h and output y:**
 x- input signal
     h- filter
-    y- input with filter applied  
+    y- input with filter applied    
 `y[n] = x[n] * h[n]`  
 
 **fft_conv**
@@ -12,10 +12,10 @@ Traditional Convolution is a O(n^2) algorithm. Fourier Transform properties tell
 `y[n] = F^-1(F(x[n]) * F(h[n]))`  
 
 **overlap_add_conv**
-Convolution is a linear operator so we can break up the impulse response into chunks of size k as follows:
+Convolution is a linear operator so we can break up the impulse response into chunks of size k as follows:  
 `h[n] = [h_1[n]|h_2[n]|h_3[n]|...]`  
 `h[n] = h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...`  
-Convolution is a linear operator so we have:
+Convolution is a linear operator so we have:  
 `y[n] = x[n] * h[n]`  
 `y[n] = x[n] * (h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...)`  
 `y[n] = x[n]*h_1[n] + x[n]*h_2[n]*d[k] + x[n]*h_3[n]*d[2k] + ...)`  
