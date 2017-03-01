@@ -4,21 +4,21 @@ This code base deals with several algorithms for rapid convolution of two sequen
 **All algorithmns input x and h and output y:**
 x- input signal
     h- filter
-    y- input with filter applied
-`y[n] = x[n] * h[n]`
+    y- input with filter applied  
+`y[n] = x[n] * h[n]`  
 
 **fft_conv**
-Traditional Convolution is a O(n^2) algorithm. Fourier Transform properties tell us that a convolution in time corresponds to multiplication in frequency. Using the FFT algorithm (O(nlogn)) for efficient transformation to frequency domain we can transform both signals to frequency, multiply, and transform back giving a O(nlogn) algorithm for convolution. Note- for accurate linear convolution we must zero pad the signals appropriately to avoid aliasing.
-`y[n] = F^-1(F(x[n]) * F(h[n]))`
+Traditional Convolution is a O(n^2) algorithm. Fourier Transform properties tell us that a convolution in time corresponds to multiplication in frequency. Using the FFT algorithm (O(nlogn)) for efficient transformation to frequency domain we can transform both signals to frequency, multiply, and transform back giving a O(nlogn) algorithm for convolution. Note- for accurate linear convolution we must zero pad the signals appropriately to avoid aliasing.  
+`y[n] = F^-1(F(x[n]) * F(h[n]))`  
 
 **overlap_add_conv**
 Convolution is a linear operator so we can break up the impulse response into chunks of size k as follows:
-`h[n] = [h_1[n]|h_2[n]|h_3[n]|...]`
-`h[n] = h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...`
+`h[n] = [h_1[n]|h_2[n]|h_3[n]|...]`  
+`h[n] = h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...`  
 Convolution is a linear operator so we have:
-`y[n] = x[n] * h[n]`
-`y[n] = x[n] * (h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...)`
-`y[n] = x[n]*h_1[n] + x[n]*h_2[n]*d[k] + x[n]*h_3[n]*d[2k] + ...)`
+`y[n] = x[n] * h[n]`  
+`y[n] = x[n] * (h_1[n] + h_2[n]*d[k] + h_3[n]*d[2k] + ...)`  
+`y[n] = x[n]*h_1[n] + x[n]*h_2[n]*d[k] + x[n]*h_3[n]*d[2k] + ...)`  
 Y can be expressed as a sum of convolved with each block of h shifted according to its position in h. Each of these "mini convolutions" can be done via the fft method mentioned above.
 
 **uniform_partitioned_conv**
