@@ -31,5 +31,5 @@ Again we have x[n] being a realtime signal that we process in chunks. We still a
 1. Optimize fft size (fft works best when the input sequence size is a power of 2)  
 2. Add non uniform partitions to impulse response as described in [section 2.2](http://ericbattenberg.com/school/partconvDAFx2011.pdf). The earlier impulse responses will be short for low latency while the later ones will be long for computational efficiency.  
 3. Use Decimation in Frequency to construct a time distributed approach for scheduling necessary FFT computations as described in [section 4](http://ericbattenberg.com/school/partconvDAFx2011.pdf).  
-4. Reduce FFT computation by using conjugate symmetry induced by entirely real audio signals.  
+4. Reduce FFT computation by using conjugate symmetry induced by entirely real audio signals. Method described [here](http://www.engineeringproductivitytools.com/stuff/T0001/PT10.HTM) 
 5. Port code to C for near real time processing
