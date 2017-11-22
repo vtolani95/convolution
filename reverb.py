@@ -108,29 +108,51 @@ def fdl(x, h):
 
 
 ### Script
+offline=False
 ### All convolution Algorithmns for One Channel Real Signals
 fs1, guitar = scipy.io.wavfile.read('./sounds/blues_guitar.wav')
 fs2, reverb = scipy.io.wavfile.read('./sounds/PlateSmall_01.wav')
 reverb = (reverb.astype('float64') / np.max(reverb))[:,0] #one channel only
 amount_verb = .015
 
-sig, timer = fft_conv(guitar, reverb)
-scipy.io.wavfile.write('./processed/fft_conv.wav', fs1, sig.astype('int16'))
-print('Naive FFT Conv Reverb: ' + str(timer) + ' seconds')
+if offline:
+  sig, timer = fft_conv(guitar, reverb)
+  scipy.io.wavfile.write('./processed/fft_conv.wav', fs1, sig.astype('int16'))
+  print('Naive FFT Conv Reverb: ' + str(timer) + ' seconds')
 
-sig2, timer = overlap_add_conv(guitar, reverb)
-scipy.io.wavfile.write('./processed/overlap_add_conv.wav', fs1, sig2.astype('int16'))
-print('Overlap Add Conv Reverb: ' + str(timer) + ' seconds')
+  sig2, timer = overlap_add_conv(guitar, reverb)
+  scipy.io.wavfile.write('./processed/overlap_add_conv.wav', fs1, sig2.astype('int16'))
+  print('Overlap Add Conv Reverb: ' + str(timer) + ' seconds')
 
-sig3, timer = uniform_partitioned_conv(guitar, reverb)
-scipy.io.wavfile.write('./processed/uniform_partitioned_conv.wav', fs1, sig3.astype('int16'))
-print('Uniform Partitioned Conv Reverb: ' + str(timer) + ' seconds')
+reverbs = ['./sounds/PlateSmall_01.wav', './sounds/St-Nicolaes-Church.wav', './sounds/Bottle_Hall.wav', './sounds/Vocal-Duo.wav']
+upc_time = []; fdl_time = []
+#for i in range(0):
+for reverb_name in reverbs: 
+  sig3, timer1 = uniform_partitioned_conv(guitar, reverb)
+  scipy.io.wavfile.write('./processed/uniform_partitioned_conv.wav', fs1, sig3.astype('int16'))
+  print('Uniform Partitioned Conv Reverb: ' + str(timer1) + ' seconds')
 
-sig4, timer = fdl(guitar, reverb)
-scipy.io.wavfile.write('./processed/fdl_conv.wav', fs1, sig4.astype('int16'))
-print("FDL: " + str(timer) + ' seconds')
+  sig4, timer2 = fdl(guitar, reverb)
+  scipy.io.wavfile.write('./processed/fdl_conv.wav', fs1, sig4.astype('int16'))
+  print("FDL: " + str(timer2) + ' seconds')
+  upc_time.append(timer1)
+  fdl_time.append(timer2)
 
-
+import matplotlib
+matplotlib.use('tkAgg')
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ind = np.arange(len(reverbs))
+rects1 = ax.bar(ind, upc_time, width, color='r')
+rects2 = ax.bar(ind+width, fdl_time, width, color='b')
+ax.set_ylabel('Time (s)')
+ax.set_xlabel('Reverb Name')
+reverb_names = [x.split('/')[2][:-4] for x in reverbs]
+ax.set_xticklabels(reverb_names)
+ax.set_xticks(ind + width)
+ax.set_title('Uniform Partitioned Convolution vs Finite Delay Line Convolution')
+ax.legend((rects1[0], rects2[0]), ('UPC', 'FDL'))
+plt.show()
 
 
 
